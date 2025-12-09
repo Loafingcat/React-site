@@ -105,7 +105,7 @@ app.post('/login', (req, res) => {
 // 4. 고객 정보 추가 (Create - POST)
 // MySQL ? -> PostgreSQL $1, $2, $3, result.insertId 대신 RETURNING id 사용
 // ==========================================================
-app.post('/api/customers', authenticateToken, (req, res) => {
+app.post('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '등록 권한이 없습니다. (Admin 필요)' });
     }
@@ -133,7 +133,7 @@ app.post('/api/customers', authenticateToken, (req, res) => {
 // 5. 고객 정보 수정 (Update - PUT)
 // MySQL ? -> PostgreSQL $1, $2, $3, result.affectedRows -> result.rowCount 처리
 // ==========================================================
-app.put('/api/customers/:id', authenticateToken, (req, res) => {
+app.put('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '수정 권한이 없습니다. (Admin 필요)' });
     }
@@ -164,7 +164,7 @@ app.put('/api/customers/:id', authenticateToken, (req, res) => {
 // 6. 고객 정보 삭제 (Delete - DELETE)
 // MySQL ? -> PostgreSQL $1, result.affectedRows -> result.rowCount 처리
 // ==========================================================
-app.delete('/api/customers/:id', authenticateToken, (req, res) => {
+app.delete('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '삭제 권한이 없습니다. (Admin 필요)' });
     }
@@ -191,7 +191,7 @@ app.delete('/api/customers/:id', authenticateToken, (req, res) => {
 // 7. 통합 검색 기능 (GET /api/customers)
 // MySQL ? -> PostgreSQL $1, $2, $3, ID 필드 비교를 위해 id::text 사용
 // ==========================================================
-app.get('/api/customers', authenticateToken, (req, res) => {
+app.get('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '고객 정보 열람 권한이 없습니다. (Admin 필요)' });
     }

@@ -12,7 +12,7 @@ function Login({ setToken }) {
         setError(''); // 에러 메시지 초기화
 
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

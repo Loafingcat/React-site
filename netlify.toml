@@ -1,0 +1,16 @@
+[build]
+  command = "cd client && yarn install && yarn build"
+  publish = "client/build" 
+
+[[redirects]]
+  # 3. API 프록시 규칙: /api/* 요청을 Railway 서버로 전달
+  from = "/api/*"
+  to = "https://react-site-production-a693.up.railway.app/:splat"
+  status = 200
+  force = true # 강제 적용
+
+[[redirects]]
+  # 4. SPA 라우팅 규칙: 나머지 요청은 index.html로 전달
+  from = "/*"
+  to = "/index.html"
+  status = 200

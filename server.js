@@ -62,7 +62,7 @@ const authenticateToken = (req, res, next) => {
 // 2. 로그인 API 구현 (POST /api/login)
 // MySQL ? -> PostgreSQL $1, connection.query -> pool.query, result.rows 처리
 // ==========================================================
-app.post('/api/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
     // 1. DB에서 사용자 정보 조회 (PostgreSQL은 테이블 이름에 쌍따옴표 사용 권장)

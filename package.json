@@ -5,7 +5,7 @@
         "client": "cd client && yarn start",
         "server": "node server.js",
         "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-        "build": "cd client && yarn install && yarn build" 
+        "build": "cd client && yarn install && yarn build"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.4",
@@ -14,7 +14,7 @@
         "dotenv": "^17.2.3",
         "express": "^5.2.1",
         "jsonwebtoken": "^9.0.3",
-        "mysql": "^2.18.1"
+        "pg": "^8.16.3"
     },
     "devDependencies": {
         "concurrently": "9.2.1"

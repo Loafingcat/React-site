@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 5000;
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const SECRET_KEY = process.env.JWT_SECRET || 'fallback_secret_for_safety';
@@ -32,22 +31,6 @@ pool.connect((err, client, release) => {
     console.log('PostgreSQL 연결 성공');
 });
 
-const allowedOrigins = [
-    'http://localhost:3000', // 로컬 개발 주소
-    'https://YOUR-NETLIFY-SITE-NAME.netlify.app' // <--- 2. 실제 Netlify 주소로 변경
-]; 
-
-app.use(cors({
-    origin: function (origin, callback) {
-        // 요청의 Origin이 허용 목록에 있거나, Origin이 없는 경우(CORS가 아님) 허용
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
-}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

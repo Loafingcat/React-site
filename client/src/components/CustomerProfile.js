@@ -1,6 +1,4 @@
-// client/src/components/CustomerProfile.js
-
-import React, { useMemo } from 'react'; // 🚨 useState 제거
+import React, { useMemo } from 'react';
 import { 
     Card, 
     CardContent, 

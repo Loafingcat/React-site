@@ -53,7 +53,6 @@ function CustomerProfile({ id, name, job, onUpdate, onDelete }) {
                         <ListItemAvatar sx={{ mr: 2 }}>
                             <Avatar 
                                 alt={`${name}의 프로필`} 
-                                // 🚨 useMemo로 계산된 imageUrl 사용
                                 src={imageUrl} 
                                 sx={{ width: 56, height: 56 }} 
                             />

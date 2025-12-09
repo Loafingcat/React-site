@@ -1,5 +1,3 @@
-// server.js (PostgreSQL/pg 버전)
-
 require('dotenv').config(); 
 
 const express = require('express');
@@ -11,10 +9,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const SECRET_KEY = process.env.JWT_SECRET || 'fallback_secret_for_safety';
 
-// ==========================================================
-// 2. PostgreSQL 연결 설정 및 Pool 생성
-// Netlify DB URL (PostgreSQL)을 사용합니다.
-// ==========================================================
+
 const pool = new Pool({
     // 이 환경 변수에는 Netlify/Neon이 제공한 전체 DB URL이 들어갑니다.
     connectionString: process.env.NETLIFY_DATABASE_URL 
@@ -37,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // ==========================================================
-// 1. 인증 미들웨어: 토큰 검증 및 사용자 권한 확인 (수정 없음)
+// 1. 인증 미들웨어: 토큰 검증 및 사용자 권한 확인
 // ==========================================================
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];

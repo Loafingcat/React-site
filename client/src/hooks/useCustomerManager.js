@@ -15,10 +15,6 @@ const useCustomerManager = (token, handleLogout) => {
 
         setLoading(true);
         try {
-            // 🚨 지연 시간 제거 (필요 없는 경우)
-            // await new Promise(resolve => setTimeout(resolve, 500)); 
-            
-            // ✅ 통합 검색 URL 생성 로직 (이미 완벽)
             const url = `/api/customers${keyword ? `?search=${encodeURIComponent(keyword)}` : ''}`;
 
             const response = await fetch(url, { 
@@ -48,7 +44,7 @@ const useCustomerManager = (token, handleLogout) => {
     // 💡 2. useEffect: 토큰이나 검색어가 바뀔 때 fetchCustomers 실행
     useEffect(() => {
         fetchCustomers(searchKeyword);
-    }, [fetchCustomers, searchKeyword]); // 🚨 searchKeyword가 의존성 배열에 있어 실시간 검색 가능
+    }, [fetchCustomers, searchKeyword]);
 
 
     // =======================================================
@@ -104,7 +100,6 @@ const useCustomerManager = (token, handleLogout) => {
     }, [token, fetchCustomers, searchKeyword]);
     
     
-    // 🚨 수정 로직 추가/완성
     const handleUpdateCustomer = useCallback(async (id, name, job) => {
         try {
             const response = await fetch(`/api/customers/${id}`, {

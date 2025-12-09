@@ -31,8 +31,6 @@ function App() {
         handleDeleteCustomer,
         handleUpdateCustomer,
     } = useCustomerManager(token, handleLogout); 
-    
-    // ... (로그인 조건부 렌더링 생략) ...
 
     if (!token) {
         return <Login setToken={setToken} />;

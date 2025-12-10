@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const cors = require('cors'); // ✨ 1. cors 라이브러리 추가
+const cors = require('cors'); // ✨ cors 라이브러리
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,23 +30,9 @@ pool.connect((err, client, release) => {
     console.log('PostgreSQL 연결 성공');
 });
 
-const allowedOrigins = [
-    'http://localhost:3000', 
-    'https://my-project-1-946huwl5f-jun-ho-byuns-projects.vercel.app' 
-];
 
-// Preflight 요청 (OPTIONS) 처리 및 CORS 정책 설정
 app.use(cors({
-    origin: (origin, callback) => {
-        // Origin 헤더가 없는 요청(같은 도메인 또는 툴 요청)이나 허용된 Origin을 통과시킵니다.
-        // Origin이 'undefined'로 오는 경우도 허용됩니다.
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            // 허용되지 않은 출처는 CORS 오류 발생
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: '*', // ✨ 이 부분이 모든 Origin을 허용하도록 설정합니다.
     credentials: true, // 토큰 (JWT) 전송을 위해 필수
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] // OPTIONS 포함 필수
 }));
@@ -81,6 +67,7 @@ const authenticateToken = (req, res, next) => {
 
 // ==========================================================
 // 2. 로그인 API 구현 (POST /login)
+// ... (기존 코드 유지)
 // ==========================================================
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -118,6 +105,7 @@ app.post('/login', (req, res) => {
 
 // ==========================================================
 // 4. 고객 정보 추가 (Create - POST)
+// ... (기존 코드 유지)
 // ==========================================================
 app.post('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -142,6 +130,7 @@ app.post('/customers', authenticateToken, (req, res) => {
 
 // ==========================================================
 // 5. 고객 정보 수정 (Update - PUT)
+// ... (기존 코드 유지)
 // ==========================================================
 app.put('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -170,6 +159,7 @@ app.put('/customers/:id', authenticateToken, (req, res) => {
 
 // ==========================================================
 // 6. 고객 정보 삭제 (Delete - DELETE)
+// ... (기존 코드 유지)
 // ==========================================================
 app.delete('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -195,6 +185,7 @@ app.delete('/customers/:id', authenticateToken, (req, res) => {
 
 // ==========================================================
 // 7. 통합 검색 기능 (GET /customers)
+// ... (기존 코드 유지)
 // ==========================================================
 app.get('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {

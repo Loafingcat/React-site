@@ -17,8 +17,8 @@ const pool = new Pool({
 });
 
 const allowedOrigins = [
-    'http://localhost:3000',
-    'https://my-project-1-bpzqrxctw-jun-ho-byuns-projects.vercel.app' 
+    'http://localhost:3000', 
+    'https://my-project-1-aif30i024-jun-ho-byuns-projects.vercel.app' 
 ];
 
 app.use(cors({

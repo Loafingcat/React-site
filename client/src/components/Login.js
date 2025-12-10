@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 
-// App.js로부터 setToken 함수를 props로 받습니다.
+const RAILWAY_API_URL = "https://react-site-production-a693.up.railway.app"; 
+
 function Login({ setToken }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -9,10 +10,10 @@ function Login({ setToken }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // 에러 메시지 초기화
+        setError('');
 
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch(`${RAILWAY_API_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -23,19 +24,20 @@ function Login({ setToken }) {
             const data = await response.json();
 
             if (!response.ok) {
-                // 백엔드에서 401, 403 오류 코드가 오면 에러 메시지 표시
                 throw new Error(data.message || '로그인에 실패했습니다.');
             }
 
-            // 1. 인증 성공: 받은 토큰을 Local Storage에 저장
             localStorage.setItem('token', data.token);
-            
-            // 2. App.js의 token 상태 업데이트 (로그인 완료)
             setToken(data.token);
 
         } catch (err) {
             console.error("로그인 중 오류 발생:", err);
-            setError(err.message);
+            // 405나 500 오류 시 'Unexpected end of JSON input' 오류를 방지하기 위해 예외 처리
+            if (err.message.includes('Unexpected end of JSON input')) {
+                setError('서버 응답 오류: 서버 상태를 확인해주세요.');
+            } else {
+                setError(err.message);
+            }
         }
     };
 

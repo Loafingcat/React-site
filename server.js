@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,10 +15,7 @@ const pool = new Pool({
     connectionString: process.env.NETLIFY_DATABASE_URL 
 });
 
-const allowedOrigins = [
-    'http://localhost:3000', 
-    'https://my-project-1-aif30i024-jun-ho-byuns-projects.vercel.app' 
-];
+
 
 app.use(cors({
     origin: (origin, callback) => {

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -14,6 +15,23 @@ const pool = new Pool({
     // 이 환경 변수에는 Netlify/Neon이 제공한 전체 DB URL이 들어갑니다.
     connectionString: process.env.NETLIFY_DATABASE_URL 
 });
+
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://my-project-1-bpzqrxctw-jun-ho-byuns-projects.vercel.app' 
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] // 허용할 HTTP 메서드 명시
+}));
 
 // 3. PostgreSQL 연결 테스트
 pool.connect((err, client, release) => {

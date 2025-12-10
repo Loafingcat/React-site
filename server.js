@@ -3,10 +3,12 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
-const app = express();
-const port = process.env.PORT || 5000;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const cors = require('cors'); // ✨ 1. cors 라이브러리 추가
+
+const app = express();
+const port = process.env.PORT || 5000;
 const SECRET_KEY = process.env.JWT_SECRET || 'fallback_secret_for_safety';
 
 
@@ -28,6 +30,27 @@ pool.connect((err, client, release) => {
     console.log('PostgreSQL 연결 성공');
 });
 
+const allowedOrigins = [
+    'http://localhost:3000', 
+    'https://my-project-1-ki7kamg0x-jun-ho-byuns-projects.vercel.app' 
+];
+
+// Preflight 요청 (OPTIONS) 처리 및 CORS 정책 설정
+app.use(cors({
+    origin: (origin, callback) => {
+        // Origin 헤더가 없는 요청(같은 도메인 또는 툴 요청)이나 허용된 Origin을 통과시킵니다.
+        // Origin이 'undefined'로 오는 경우도 허용됩니다.
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            // 허용되지 않은 출처는 CORS 오류 발생
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, // 토큰 (JWT) 전송을 위해 필수
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] // OPTIONS 포함 필수
+}));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,6 +58,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ==========================================================
 // 1. 인증 미들웨어: 토큰 검증 및 사용자 권한 확인
+// ... (기존 코드 유지)
 // ==========================================================
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -56,17 +80,14 @@ const authenticateToken = (req, res, next) => {
 
 
 // ==========================================================
-// 2. 로그인 API 구현 (POST /api/login)
-// MySQL ? -> PostgreSQL $1, connection.query -> pool.query, result.rows 처리
+// 2. 로그인 API 구현 (POST /login)
 // ==========================================================
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
-    // 1. DB에서 사용자 정보 조회 (PostgreSQL은 테이블 이름에 쌍따옴표 사용 권장)
-    // ? 대신 $1 사용
     pool.query('SELECT * FROM "user" WHERE username = $1', [username])
     .then(result => {
-        const users = result.rows; // PostgreSQL 쿼리 결과는 result.rows에 담김
+        const users = result.rows;
 
         if (users.length === 0) {
             return res.status(401).send({ message: '사용자 이름이 잘못되었거나 존재하지 않습니다.' });
@@ -74,20 +95,17 @@ app.post('/login', (req, res) => {
         
         const user = users[0];
 
-        // 2. 비밀번호 비교 (bcrypt 사용)
         bcrypt.compare(password, user.password, (err, result) => {
             if (err || !result) {
                 return res.status(401).send({ message: '비밀번호가 잘못되었습니다.' });
             }
             
-            // 3. 인증 성공 -> JWT 토큰 생성
             const token = jwt.sign(
                 { id: user.id, username: user.username, role: user.role }, 
                 SECRET_KEY, 
                 { expiresIn: '1h' }
             );
             
-            // 4. 토큰과 사용자 정보를 클라이언트에 응답
             res.json({ token, username: user.username, role: user.role });
         });
     })
@@ -100,7 +118,6 @@ app.post('/login', (req, res) => {
 
 // ==========================================================
 // 4. 고객 정보 추가 (Create - POST)
-// MySQL ? -> PostgreSQL $1, $2, $3, result.insertId 대신 RETURNING id 사용
 // ==========================================================
 app.post('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -109,26 +126,22 @@ app.post('/customers', authenticateToken, (req, res) => {
     
     const { id, name, job } = req.body;
     
-    // PostgreSQL 쿼리: ? 대신 $1, $2, $3 사용, 삽입된 ID를 얻기 위해 RETURNING id 추가
     const sql = 'INSERT INTO customer (id, name, job) VALUES ($1, $2, $3) RETURNING id';
     const params = [id, name, job];
 
     pool.query(sql, params)
     .then(result => {
-        // PostgreSQL에서 삽입된 ID는 result.rows[0].id에 담김
         const insertedId = result.rows[0].id;
         res.status(201).send({ message: '고객 정보가 성공적으로 등록되었습니다.', id: insertedId });
     })
     .catch(err => {
         console.error("DB 데이터 추가 오류:", err);
-        // ID 중복 등 오류 발생 시 400 Bad Request 반환
         res.status(400).send({ message: '데이터 추가에 실패했습니다. (ID 중복 또는 DB 오류)' });
     });
 });
 
 // ==========================================================
 // 5. 고객 정보 수정 (Update - PUT)
-// MySQL ? -> PostgreSQL $1, $2, $3, result.affectedRows -> result.rowCount 처리
 // ==========================================================
 app.put('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -143,9 +156,7 @@ app.put('/customers/:id', authenticateToken, (req, res) => {
 
     pool.query(sql, params)
     .then(result => {
-        // PostgreSQL에서 영향 받은 행 수는 result.rowCount에 담김
         if (result.rowCount === 0) { 
-            // 해당 ID의 고객이 존재하지 않을 경우
             return res.status(404).send({ message: '수정할 고객을 찾을 수 없습니다.' });
         }
 
@@ -159,7 +170,6 @@ app.put('/customers/:id', authenticateToken, (req, res) => {
 
 // ==========================================================
 // 6. 고객 정보 삭제 (Delete - DELETE)
-// MySQL ? -> PostgreSQL $1, result.affectedRows -> result.rowCount 처리
 // ==========================================================
 app.delete('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -169,7 +179,6 @@ app.delete('/customers/:id', authenticateToken, (req, res) => {
     const customerId = req.params.id;
     const sql = 'DELETE FROM customer WHERE id = $1';
 
-    // params는 배열로 전달해야 함
     pool.query(sql, [customerId])
     .then(result => {
         if (result.rowCount === 0) {
@@ -185,8 +194,7 @@ app.delete('/customers/:id', authenticateToken, (req, res) => {
 });
 
 // ==========================================================
-// 7. 통합 검색 기능 (GET /api/customers)
-// MySQL ? -> PostgreSQL $1, $2, $3, ID 필드 비교를 위해 id::text 사용
+// 7. 통합 검색 기능 (GET /customers)
 // ==========================================================
 app.get('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
@@ -198,8 +206,6 @@ app.get('/customers', authenticateToken, (req, res) => {
     let params = [];
     
     if (searchQuery) {
-        // PostgreSQL: ID(숫자형)를 LIKE 검색하려면 id::text로 형변환 필요.
-        // ? 대신 $1, $2, $3 사용
         sql += " WHERE id::text LIKE $1 OR name LIKE $2 OR job LIKE $3";
         params = [`%${searchQuery}%`, `%${searchQuery}%`, `%${searchQuery}%`];
     }
@@ -208,7 +214,6 @@ app.get('/customers', authenticateToken, (req, res) => {
 
     pool.query(sql, params)
     .then(result => {
-        // PostgreSQL 쿼리 결과는 result.rows에 담김
         res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.set('Pragma', 'no-cache');
         res.set('Expires', '0');
@@ -219,5 +224,10 @@ app.get('/customers', authenticateToken, (req, res) => {
         res.status(500).send("데이터베이스 오류 발생");
     });
 });
+
+app.get('/', (req, res) => {
+    res.status(200).send({ message: 'API Server is running successfully on Railway.' }); 
+});
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

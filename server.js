@@ -32,7 +32,7 @@ pool.connect((err, client, release) => {
 
 const allowedOrigins = [
     'http://localhost:3000', 
-    'https://my-project-1-ki7kamg0x-jun-ho-byuns-projects.vercel.app' 
+    'https://my-project-1-946huwl5f-jun-ho-byuns-projects.vercel.app' 
 ];
 
 // Preflight 요청 (OPTIONS) 처리 및 CORS 정책 설정

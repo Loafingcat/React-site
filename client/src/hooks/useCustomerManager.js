@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 
+// 🚨🚨🚨 수정 1: Railway 서버의 절대 주소를 상수로 정의합니다. 🚨🚨🚨
+const RAILWAY_API_URL = "https://react-site-production-a693.up.railway.app"; 
+
 // Custom Hook: 고객 데이터를 관리하고 CRUD 로직을 처리
 const useCustomerManager = (token, handleLogout) => {
     const [customers, setCustomers] = useState([]);
@@ -15,20 +18,25 @@ const useCustomerManager = (token, handleLogout) => {
 
         setLoading(true);
         try {
-            const url = `/api/customers${keyword ? `?search=${encodeURIComponent(keyword)}` : ''}`;
+            // 🚨🚨🚨 수정 2: URL을 절대 경로 + /customers로 변경 (프록시 /api 제거) 🚨🚨🚨
+            const url = `${RAILWAY_API_URL}/customers${keyword ? `?search=${encodeURIComponent(keyword)}` : ''}`;
 
             const response = await fetch(url, { 
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             
             if (response.status === 401 || response.status === 403) {
-                // 서버에서 토큰 오류가 오면 로그아웃
                 handleLogout();
                 setSnackbar({ open: true, message: "세션 만료. 재로그인하세요.", severity: 'error' });
                 return;
             }
 
-            if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+            if (!response.ok) {
+                // 서버가 HTML을 반환하면 여기서 JSON 파싱에 실패합니다.
+                // 만약 404 응답이더라도 JSON 파싱 오류 대신 HTTP 오류로 처리하도록 합니다.
+                const errorText = await response.text(); 
+                throw new Error(`HTTP Error: ${response.status}. Message: ${errorText.substring(0, 100)}...`);
+            }
 
             const body = await response.json();
             setCustomers(body);
@@ -53,7 +61,8 @@ const useCustomerManager = (token, handleLogout) => {
 
     const handleAddCustomer = useCallback(async (newCustomer) => {
         try {
-            const response = await fetch('/api/customers', {
+            // 🚨🚨🚨 수정 3: URL을 절대 경로 + /customers로 변경 🚨🚨🚨
+            const response = await fetch(`${RAILWAY_API_URL}/customers`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -81,7 +90,8 @@ const useCustomerManager = (token, handleLogout) => {
             return;
         }
         try {
-            const response = await fetch(`/api/customers/${id}`, {
+            // 🚨🚨🚨 수정 4: URL을 절대 경로 + /customers/{id}로 변경 🚨🚨🚨
+            const response = await fetch(`${RAILWAY_API_URL}/customers/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` },
             });
@@ -102,7 +112,8 @@ const useCustomerManager = (token, handleLogout) => {
     
     const handleUpdateCustomer = useCallback(async (id, name, job) => {
         try {
-            const response = await fetch(`/api/customers/${id}`, {
+            // 🚨🚨🚨 수정 5: URL을 절대 경로 + /customers/{id}로 변경 🚨🚨🚨
+            const response = await fetch(`${RAILWAY_API_URL}/customers/${id}`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',

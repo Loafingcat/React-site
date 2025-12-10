@@ -11,13 +11,11 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-// 이미지 URL 목록 (단일 URL로 변경하여 효율성 개선)
 const randomImageUrlBase = 'https://picsum.photos/64/64?random='; 
 
 // props에 id, onUpdate, onDelete 추가
 function CustomerProfile({ id, name, job, onUpdate, onDelete }) {
     
-    // ID를 기반으로 고유한 이미지 URL을 생성 (고정된 이미지 사용)
     const imageUrl = useMemo(() => {
         return `${randomImageUrlBase}${id}`; 
     }, [id]); // ID가 바뀔 때만 이미지가 변경되도록 의존성 배열에 [id] 추가
@@ -46,10 +44,10 @@ function CustomerProfile({ id, name, job, onUpdate, onDelete }) {
             <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     
-                    {/* 프로필 정보 영역 */}
+                    
                     <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
                         
-                        {/* 1. 아바타 */}
+                        
                         <ListItemAvatar sx={{ mr: 2 }}>
                             <Avatar 
                                 alt={`${name}의 프로필`} 
@@ -58,7 +56,7 @@ function CustomerProfile({ id, name, job, onUpdate, onDelete }) {
                             />
                         </ListItemAvatar>
                         
-                        {/* 2. 고객 정보 */}
+                        
                         <div className="profile-details">
                             <Typography variant="h6" component="div">
                                 이름: {name} (ID: {id})
@@ -69,7 +67,7 @@ function CustomerProfile({ id, name, job, onUpdate, onDelete }) {
                         </div>
                     </Box>
 
-                    {/* 3. 액션 버튼 영역 */}
+                
                     <Box sx={{ ml: 2, display: 'flex', gap: 1 }}>
                         <Button 
                             variant="contained" 

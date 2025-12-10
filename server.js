@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const cors = require('cors'); // ✨ cors 라이브러리
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -13,13 +13,12 @@ const SECRET_KEY = process.env.JWT_SECRET || 'fallback_secret_for_safety';
 
 
 const pool = new Pool({
-    // 이 환경 변수에는 Netlify/Neon이 제공한 전체 DB URL이 들어갑니다.
     connectionString: process.env.NETLIFY_DATABASE_URL 
 });
 
 
 
-// 3. PostgreSQL 연결 테스트
+// PostgreSQL 연결 테스트
 pool.connect((err, client, release) => {
     if (err) {
         // 연결 실패 시 오류 출력 
@@ -32,7 +31,7 @@ pool.connect((err, client, release) => {
 
 
 app.use(cors({
-    origin: '*', // ✨ 이 부분이 모든 Origin을 허용하도록 설정합니다.
+    origin: '*', 
     credentials: true, // 토큰 (JWT) 전송을 위해 필수
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] // OPTIONS 포함 필수
 }));
@@ -42,10 +41,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// ==========================================================
-// 1. 인증 미들웨어: 토큰 검증 및 사용자 권한 확인
-// ... (기존 코드 유지)
-// ==========================================================
+
+// 인증 미들웨어: 토큰 검증 및 사용자 권한 확인
+
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; 
@@ -65,10 +63,8 @@ const authenticateToken = (req, res, next) => {
 };
 
 
-// ==========================================================
-// 2. 로그인 API 구현 (POST /login)
-// ... (기존 코드 유지)
-// ==========================================================
+
+// 로그인 API 구현 (POST /login)
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
@@ -103,10 +99,8 @@ app.post('/login', (req, res) => {
 });
 
 
-// ==========================================================
-// 4. 고객 정보 추가 (Create - POST)
-// ... (기존 코드 유지)
-// ==========================================================
+
+// 고객 정보 추가 (Create - POST)
 app.post('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '등록 권한이 없습니다. (Admin 필요)' });
@@ -128,10 +122,7 @@ app.post('/customers', authenticateToken, (req, res) => {
     });
 });
 
-// ==========================================================
-// 5. 고객 정보 수정 (Update - PUT)
-// ... (기존 코드 유지)
-// ==========================================================
+// 고객 정보 수정 (Update - PUT)
 app.put('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '수정 권한이 없습니다. (Admin 필요)' });
@@ -157,10 +148,8 @@ app.put('/customers/:id', authenticateToken, (req, res) => {
     });
 });
 
-// ==========================================================
-// 6. 고객 정보 삭제 (Delete - DELETE)
-// ... (기존 코드 유지)
-// ==========================================================
+
+// 고객 정보 삭제 (Delete - DELETE)
 app.delete('/customers/:id', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '삭제 권한이 없습니다. (Admin 필요)' });
@@ -183,10 +172,7 @@ app.delete('/customers/:id', authenticateToken, (req, res) => {
     });
 });
 
-// ==========================================================
-// 7. 통합 검색 기능 (GET /customers)
-// ... (기존 코드 유지)
-// ==========================================================
+// 통합 검색 기능 (GET /customers)
 app.get('/customers', authenticateToken, (req, res) => {
     if (req.user.role !== 'admin') {
         return res.status(403).send({ message: '고객 정보 열람 권한이 없습니다. (Admin 필요)' });

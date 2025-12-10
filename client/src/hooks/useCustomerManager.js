@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 
-// 🚨🚨🚨 수정 1: Railway 서버의 절대 주소를 상수로 정의합니다. 🚨🚨🚨
 const RAILWAY_API_URL = "https://react-site-production-a693.up.railway.app"; 
 
 // Custom Hook: 고객 데이터를 관리하고 CRUD 로직을 처리
@@ -12,13 +11,12 @@ const useCustomerManager = (token, handleLogout) => {
 
     const handleCloseSnackbar = useCallback(() => setSnackbar(prev => ({ ...prev, open: false })), []);
 
-    // 💡 1. 데이터 로딩 함수 (useCallback으로 최적화)
+    // 데이터 로딩 함수 (useCallback으로 최적화)
     const fetchCustomers = useCallback(async (keyword) => {
         if (!token) return;
 
         setLoading(true);
         try {
-            // 🚨🚨🚨 수정 2: URL을 절대 경로 + /customers로 변경 (프록시 /api 제거) 🚨🚨🚨
             const url = `${RAILWAY_API_URL}/customers${keyword ? `?search=${encodeURIComponent(keyword)}` : ''}`;
 
             const response = await fetch(url, { 
@@ -32,8 +30,6 @@ const useCustomerManager = (token, handleLogout) => {
             }
 
             if (!response.ok) {
-                // 서버가 HTML을 반환하면 여기서 JSON 파싱에 실패합니다.
-                // 만약 404 응답이더라도 JSON 파싱 오류 대신 HTTP 오류로 처리하도록 합니다.
                 const errorText = await response.text(); 
                 throw new Error(`HTTP Error: ${response.status}. Message: ${errorText.substring(0, 100)}...`);
             }
@@ -49,19 +45,14 @@ const useCustomerManager = (token, handleLogout) => {
         }
     }, [token, handleLogout]);
 
-    // 💡 2. useEffect: 토큰이나 검색어가 바뀔 때 fetchCustomers 실행
     useEffect(() => {
         fetchCustomers(searchKeyword);
     }, [fetchCustomers, searchKeyword]);
 
-
-    // =======================================================
-    // 3. CRUD Logic
-    // =======================================================
+    // CRUD Logic
 
     const handleAddCustomer = useCallback(async (newCustomer) => {
         try {
-            // 🚨🚨🚨 수정 3: URL을 절대 경로 + /customers로 변경 🚨🚨🚨
             const response = await fetch(`${RAILWAY_API_URL}/customers`, {
                 method: 'POST',
                 headers: { 
@@ -90,7 +81,6 @@ const useCustomerManager = (token, handleLogout) => {
             return;
         }
         try {
-            // 🚨🚨🚨 수정 4: URL을 절대 경로 + /customers/{id}로 변경 🚨🚨🚨
             const response = await fetch(`${RAILWAY_API_URL}/customers/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` },
@@ -112,14 +102,13 @@ const useCustomerManager = (token, handleLogout) => {
     
     const handleUpdateCustomer = useCallback(async (id, name, job) => {
         try {
-            // 🚨🚨🚨 수정 5: URL을 절대 경로 + /customers/{id}로 변경 🚨🚨🚨
             const response = await fetch(`${RAILWAY_API_URL}/customers/${id}`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` 
                 },
-                body: JSON.stringify({ name, job }), // 이름과 직무만 보냅니다.
+                body: JSON.stringify({ name, job }), // 이름과 직무만
             });
 
             const data = await response.json();

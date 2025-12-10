@@ -59,18 +59,15 @@ function App() {
                 
                 <hr />
                 
-                {/* 1. 등록 폼 배치 */}
                 <CustomerAdd 
                     onAdd={handleAddCustomer}
                 />
                 
-                {/* 2. 검색 폼 배치 */}
                 <CustomerSearch 
                     searchKeyword={searchKeyword}
                     setSearchKeyword={setSearchKeyword}
                 />
 
-                {/* 고객 리스트 출력 */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
                     {loading ? (
                         <Box sx={{ mt: 4, textAlign: 'center' }}>
@@ -96,7 +93,6 @@ function App() {
                 </Box>
             </Container>
 
-            {/* 알림 스낵바 */}
             <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
                 <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
                     {snackbar.message}

@@ -32,7 +32,6 @@ function Login({ setToken }) {
 
         } catch (err) {
             console.error("로그인 중 오류 발생:", err);
-            // 405나 500 오류 시 'Unexpected end of JSON input' 오류를 방지하기 위해 예외 처리
             if (err.message.includes('Unexpected end of JSON input')) {
                 setError('서버 응답 오류: 서버 상태를 확인해주세요.');
             } else {

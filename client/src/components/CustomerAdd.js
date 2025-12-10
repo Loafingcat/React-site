@@ -9,9 +9,6 @@ function CustomerAdd({ onAdd }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // 클라이언트 측의 필수 입력 검사:
-        // 백엔드에서 ID, 이름, 직무를 모두 요구하므로, 
-        // 여기서 명시적으로 확인하고 하나라도 빠지면 등록을 막습니다.
         if (!id || !name || !job) {
             alert('ID, 이름, 직무는 모두 입력해야 합니다.');
             return;

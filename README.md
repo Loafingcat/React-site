@@ -16,7 +16,7 @@
 1. [Tech Stack](#-tech-stack)
 2. [CI/CD Pipeline](#-cicd-pipeline-automated-deployment)
 3. [System Architecture](#-system-architecture)
-4. [Key Features & Demo](#-key-features--demo)
+4. [Key Features](#-key-features)
 5. [Troubleshooting](#-troubleshooting-critical-issue-solving)
 
 ---

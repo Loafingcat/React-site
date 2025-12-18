@@ -91,10 +91,11 @@
    git clone [저장소 주소]
 
 2. 환경 변수를 설정합니다 (.env):
-   NETLIFY_DATABASE_URL=your_postgres_url
+   ```bash
+   NETLIFY_DATABASE_URL=your_neon_postgres_url
    JWT_SECRET=your_secret_key
    
-3. 패키지를 설치하고 실행합니다:
-
- # Server&&Client (Root)
- yarn start
+4. 패키지를 설치하고 실행합니다:
+   ```bash
+    # Server&&Client (Root)
+    yarn start

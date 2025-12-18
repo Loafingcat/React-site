@@ -8,8 +8,7 @@
 ## 🔗 Project Links & Info
 * **Live Demo:** [https://my-project-1-iun1kt7q9-jun-ho-byuns-projects.vercel.app]
 * **Demo Video:** [https://youtu.be/_S1TI1rxjmg]
-* **Test Account:** * **ID:** `admin`
-  * **PW:** `admin123` (보안을 위해 해싱 처리됨)
+* **Test Account:** * **ID:** `admin` **PW:** `admin123` (보안을 위해 해싱 처리됨)
 
 ---
 

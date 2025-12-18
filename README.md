@@ -28,7 +28,7 @@
 | :--- | :--- |
 | **Frontend** | ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB) ![MUI](https://img.shields.io/badge/Material--UI-0081CB?style=flat&logo=material-ui&logoColor=white) |
 | **Backend** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white) ![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white) |
-| **Database** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white) |
+| **Database** | ![Neon](https://img.shields.io/badge/Neon-00E599?style=flat&logo=neon&logoColor=black) |
 | **Security** | ![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=json-web-tokens&logoColor=white) ![BCrypt](https://img.shields.io/badge/BCrypt-4EA94B?style=flat) |
 | **Deployment** | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) ![Railway](https://img.shields.io/badge/Railway-131415?style=flat&logo=railway&logoColor=white) |
 
@@ -56,17 +56,15 @@
 
 ---
 
-## ✨ Key Features & Demo
+## ✨ Key Features
 
 ### 1. JWT 기반 보안 로그인
 * **BCrypt** 라이브러리를 사용해 비밀번호를 단방향 해싱하여 보안성을 높였습니다.
 * **JWT (JSON Web Token)**를 활용하여 인증된 사용자만 고객 데이터에 접근할 수 있도록 미들웨어를 구현했습니다.
-* *Demo 시점:* 유튜브 영상 [0:00~1:30]
 
 ### 2. 고객 데이터 CRUD 관리
 * 관리자 전용 페이지에서 고객 정보를 등록, 수정, 삭제할 수 있습니다.
 * **Material-UI**의 Table과 Dialog를 활용하여 직관적인 UX를 제공합니다.
-* *Demo 시점:* 유튜브 영상 [1:31~3:00]
 
 ### 3. 실시간 통합 검색
 * SQL의 `LIKE` 구문과 정규식을 활용하여 이름, 직업 등 다양한 키워드로 실시간 검색이 가능합니다.
@@ -92,3 +90,12 @@
 1. 저장소를 클론합니다:
    ```bash
    git clone [저장소 주소]
+
+2. 환경 변수를 설정합니다 (.env):
+   NETLIFY_DATABASE_URL=your_postgres_url
+   JWT_SECRET=your_secret_key
+   
+3. 패키지를 설치하고 실행합니다:
+
+ # Server&&Client (Root)
+ yarn start

@@ -57,7 +57,7 @@ const authenticateToken = (req, res, next) => {
             return res.status(403).send({ message: '유효하지 않거나 만료된 토큰입니다.' }); 
         }
         
-        req.user = user; 
+        req.user = user;
         next();
     });
 };

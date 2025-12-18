@@ -97,5 +97,9 @@
    
 4. 패키지를 설치하고 실행합니다:
    ```bash
+    npm install
+
+    yarn install
+   
     # Server&&Client (Root)
     yarn start

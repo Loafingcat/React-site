@@ -11,7 +11,7 @@ JWT 인증을 통한 보안 로그인과 고객 데이터의 CRUD(생성, 조회
 - **Frontend:** React, Material-UI, Axios
 - **Backend:** Node.js, Express
 - **Database:** PostgreSQL
-- **Deployment:** Vercel (Front), Railway (Back/DB)
+- **Deployment:** Vercel (Front), Railway (Back), Neon(DB)
 - **DevOps:** Git, GitHub
 
 ## ✨ Key Features

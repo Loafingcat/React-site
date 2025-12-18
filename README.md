@@ -3,7 +3,7 @@
 React와 Node.js, PostgreSQL을 사용하여 구축한 **풀스택 고객 관리 웹 애플리케이션**입니다.
 JWT 인증을 통한 보안 로그인과 고객 데이터의 CRUD(생성, 조회, 수정, 삭제) 기능을 제공합니다.
 
-🔗 **Demo Link:** [여기에 Vercel 배포 링크 입력]
+🔗 **Demo Link:** [https://my-project-1-iun1kt7q9-jun-ho-byuns-projects.vercel.app]
 🔑 **Test Account:** ID: `admin` / PW: `admin123` (예시)
 
 ## 🛠 Tech Stack
@@ -21,9 +21,7 @@ JWT 인증을 통한 보안 로그인과 고객 데이터의 CRUD(생성, 조회
 3. **Smart Search:** 키워드 기반 실시간 고객 검색
 4. **Responsive UI:** Material-UI를 활용한 깔끔한 디자인
 
-## 🚀 Troubleshooting Experience (핵심!)
-
-개발 과정에서 겪은 주요 이슈와 해결 과정입니다.
+## 🚀 Troubleshooting Experience
 
 ### 1. CORS & Proxy Issue
 - **상황:** 배포 후 프론트엔드와 백엔드 간 통신이 `401 Unauthorized` 및 CORS 정책으로 차단됨.

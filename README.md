@@ -1,4 +1,4 @@
-# 📋 Secure Customer Management System (CMS)
+# 📋 Customer Management System (CMS)
 
 > **React**와 **Express**, **PostgreSQL**을 활용한 보안 로그인 기반의 고객 데이터 관리 시스템입니다.  
 > push를 통해 코드 수정이 github에 반영되면 **Vercel**과 **Railway**를 통해 빌드부터 배포까지 자동으로 이루어지는 **CI/CD 파이프라인**을 구축하였습니다.

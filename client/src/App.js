@@ -7,7 +7,7 @@ import CustomerAdd from './components/CustomerAdd'; // 등록 컴포넌트 임�
 import CustomerSearch from './components/CustomerSearch'; // 검색 컴포넌트 임포트
 import useCustomerManager from './hooks/useCustomerManager'; 
 
-import { 
+import {
     Container, Box, Typography, CircularProgress, Button, AppBar, 
     Toolbar, Snackbar, Alert 
 } from '@mui/material';
